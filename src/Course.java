@@ -3,19 +3,19 @@ public class Course {
 	Course(){
 
 	}
-	void Course1() {
+	void course1() {
 
 	}
-	void Course2() {
+	void course2() {
 
 	}
-	void Course3() {
+	void course3() {
 
 	}
-	void Course4() {
+	void course4() {
 
 	}
-	void Course5() {
+	void course5() {
 
 	}
 }

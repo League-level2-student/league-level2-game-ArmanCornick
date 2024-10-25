@@ -20,7 +20,7 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		frame = new JFrame();
 		wave = new Cube();
 		frame.add(this);
-		this.setPreferredSize(new Dimension(1000,1000));
+		this.setPreferredSize(new Dimension(1500,1000));
 		frame.setVisible(true);
 		frame.pack();
 		time.start();
@@ -35,6 +35,7 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		wave.updateMovement();
+		wave.updateObstacles();
 		repaint();
 	}
 
@@ -59,7 +60,7 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	public void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(Color.cyan.darker());
-		g.fillRect(0,0,1000,1000);
+		g.fillRect(0,0,1500,1000);
 		wave.draw(g);
 	
 	}
