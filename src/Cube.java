@@ -10,7 +10,6 @@ public class Cube extends GameObject {
 	Boolean goingUp;
 	static BufferedImage waveImage;
 	int angle = 45;
-	int q = 1000;
 	ArrayList<Point> points;
 	
 	static {
@@ -18,30 +17,26 @@ public class Cube extends GameObject {
 	}
 	
 	Cube(){	
-		super(280,460,140,92);
+		super(280,460,100,92);
 		goingUp = false;
 		points = new ArrayList<Point>();
 	}
 	void updateMovement() {
 		if(goingUp==false) {
 			angle = 45;
-			y+=4;
+			y+=8;
 		} else {
 			angle = -45;
-			y-=4;
+			y-=8;
 		}
 		points.add(new Point (x+50,y+height/2));
 		updateTrail();
-		update();
-	}
-	
-	void updateObstacles() {
-		q-=4;
+		collisionBox.setBounds(x+width/3, y+height/3, width/3, height/3);
 	}
 
 	void updateTrail(){
 		for(int i=0;i<points.size();i++) {
-			points.get(i).x-=4;
+			points.get(i).x-=8;
 		}
 		if(points.size()>0 && points.get(0).x<-30) {
 			points.remove(0);
@@ -66,9 +61,9 @@ public class Cube extends GameObject {
 		g1.rotate(radAngle, x+width/2, y+height/2);
 		g.setColor(Color.black);
 		g.drawImage(waveImage,280,y,width,height, null);
+		g.setColor(Color.red);
+		g.drawRect(collisionBox.x, collisionBox.y, collisionBox.width, collisionBox.height);
 		g1.rotate(-radAngle, x+width/2, y+height/2);
-		g.fillRect(q,450,1000,100);
-		g.fillRect(q,225,1000,100);
-		
+
 	}
 }

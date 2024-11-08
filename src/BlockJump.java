@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import javax.swing.Timer;
 public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	JFrame frame;
 	Cube wave;
+	ArrayList<Obstacle> obstacles = CourseGenerator.course1();
 	Timer time;
 
 	BlockJump(){
@@ -35,10 +37,21 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		wave.updateMovement();
-		wave.updateObstacles();
+		updateObstacles();
 		repaint();
+		checkCollision();
 	}
 
+	public void checkCollision() {
+		// TODO Auto-generated method stub
+		for(int e=0;e<obstacles.size();e++) {
+		if(wave.collisionBox.intersects(obstacles.get(e).collisionBox)) {
+			System.out.println("dead");
+			obstacles = CourseGenerator.course1();
+		}
+		}
+	}
+	
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode()==KeyEvent.VK_UP) {
 			wave.goingUp = true;
@@ -50,7 +63,13 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 		wave.goingUp = false;
 	}
-
+	
+	void updateObstacles() {
+		for(Obstacle i: obstacles) {
+			i.update();
+		}
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
@@ -61,6 +80,9 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 		g.setColor(Color.cyan.darker());
 		g.fillRect(0,0,1500,1000);
+		for(Obstacle i: obstacles) {
+			i.draw(g);
+		}
 		wave.draw(g);
 	
 	}
