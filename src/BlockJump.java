@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,7 +15,7 @@ import javax.swing.Timer;
 public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	JFrame frame;
 	Cube wave;
-	ArrayList<Obstacle> obstacles = CourseGenerator.course1();
+	ArrayList<Obstacle> obstacles = CourseGenerator.course2();
 	Timer time;
 
 	BlockJump(){
@@ -47,7 +48,8 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		for(int e=0;e<obstacles.size();e++) {
 		if(wave.collisionBox.intersects(obstacles.get(e).collisionBox)) {
 			System.out.println("dead");
-			obstacles = CourseGenerator.course1();
+			obstacles = CourseGenerator.course2();
+			wave.y = 500;
 		}
 		}
 	}
@@ -65,8 +67,14 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	}
 	
 	void updateObstacles() {
-		for(Obstacle i: obstacles) {
+		Iterator<Obstacle> iter = obstacles.iterator();
+		
+		while(iter.hasNext()) {
+			Obstacle i = iter.next();
 			i.update();
+			if(!i.isActive) {
+				iter.remove();
+			}
 		}
 	}
 	

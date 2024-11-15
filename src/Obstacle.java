@@ -12,6 +12,9 @@ public class Obstacle extends GameObject{
 	void update() {
 		// TODO Auto-generated method stub
 		x-=8;
+		if(x<=-50-width) {
+			isActive = false;
+		}
 		super.update();
 	}
 	public void draw(Graphics g) {
