@@ -15,21 +15,23 @@ import javax.swing.Timer;
 public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	JFrame frame;
 	Cube wave;
-	ArrayList<Obstacle> obstacles = CourseGenerator.course2();
+	ArrayList<Obstacle> obstacles = CourseGenerator.course(1);
 	Timer time;
+	int counter = 1;
 
-	BlockJump(){
-		time = new Timer(1000/60, this);
+	BlockJump() {
+		time = new Timer(1000 / 60, this);
 		frame = new JFrame();
 		wave = new Cube();
 		frame.add(this);
-		this.setPreferredSize(new Dimension(1500,1000));
+		this.setPreferredSize(new Dimension(1500, 1000));
 		frame.setVisible(true);
 		frame.pack();
 		time.start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addKeyListener(this);
 	}
+
 	public static void main(String[] args) {
 		new BlockJump();
 	}
@@ -45,17 +47,18 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 
 	public void checkCollision() {
 		// TODO Auto-generated method stub
-		for(int e=0;e<obstacles.size();e++) {
-		if(wave.collisionBox.intersects(obstacles.get(e).collisionBox)) {
-			System.out.println("dead");
-			obstacles = CourseGenerator.course2();
-			wave.y = 500;
-		}
+		for (int e = 0; e < obstacles.size(); e++) {
+			if (wave.collisionBox.intersects(obstacles.get(e).collisionBox)) {
+				System.out.println("dead");
+				obstacles = CourseGenerator.course(1);
+				wave.y = 500;
+				counter = 1;
+			}
 		}
 	}
-	
+
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_UP) {
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			wave.goingUp = true;
 		}
 	}
@@ -65,33 +68,37 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 		wave.goingUp = false;
 	}
-	
+
 	void updateObstacles() {
-		Iterator<Obstacle> iter = obstacles.iterator();
-		
-		while(iter.hasNext()) {
-			Obstacle i = iter.next();
-			i.update();
-			if(!i.isActive) {
-				iter.remove();
-			}
+		for (int i = 0; i < obstacles.size(); i++) {
+			obstacles.get(i).update();
 		}
+		if (obstacles.size() > 0 && obstacles.get(0).isActive == false) {
+			obstacles.remove(0);
+			System.out.println("money");
+		}
+		if (obstacles.size() == 0) {
+			counter++;
+			obstacles = CourseGenerator.course(counter);
+		}
+
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(Color.cyan.darker());
-		g.fillRect(0,0,1500,1000);
-		for(Obstacle i: obstacles) {
+		g.fillRect(0, 0, 1500, 1000);
+		for (Obstacle i : obstacles) {
 			i.draw(g);
 		}
 		wave.draw(g);
-	
+
 	}
 }

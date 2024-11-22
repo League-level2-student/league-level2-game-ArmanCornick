@@ -22,4 +22,6 @@ public class Obstacle extends GameObject{
 		g.setColor(Color.black);
 		g.fillRect(x,y,width,height);
 	}
+	
+	
 }

@@ -1,7 +1,23 @@
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseGenerator {
+	
+	static ArrayList<Obstacle> course(int courseNumber){
+		if(courseNumber == 1) {
+			return course1();
+		}
+		else if(courseNumber == 2) {
+			return course2();
+		}
+		else if(courseNumber == 3) {
+			return course3();
+		} else {
+			return course4();
+		}
+	}
+	
 	
 	static ArrayList<Obstacle> course1() {
 		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
@@ -60,13 +76,45 @@ public class CourseGenerator {
 		
 		return obstacles;
 	}
-	void course3() {
-
+	static ArrayList<Obstacle> course3() {
+		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+		for(int i=1;i<20;i++) {
+			obstacles.add(new Obstacle(1000+(i*50)+(200),850-(i*20),50,50));
+			obstacles.add(new Obstacle(1000+(i*50)+(200),640-(i*20),50,50));
+		}
+		for(int i=1;i<20;i++) {
+			obstacles.add(new Obstacle(1900+(i*50)+(200),450+(i*20),50,50));
+			obstacles.add(new Obstacle(1900+(i*50)+(200),240+(i*20),50,50));
+		}
+		return obstacles;
 	}
-	void course4() {
-
+	static ArrayList<Obstacle> course4() {
+		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+		for(int i=1;i<10;i++) {
+			obstacles.add(new Obstacle(1000+(i*50)+(200),1130-(i*80),50,50));
+			obstacles.add(new Obstacle(1000+(i*50)+(200),640-(i*80),50,50));
+		}
+		for(int i=1;i<10;i++) {
+			obstacles.add(new Obstacle(1400+(i*50)+(200),330+(i*80),50,50));
+			obstacles.add(new Obstacle(1400+(i*50)+(200),-160+(i*80),50,50));
+		}
+		for(int i=1;i<10;i++) {
+			obstacles.add(new Obstacle(1800+(i*50)+(200),1130-(i*80),50,50));
+			obstacles.add(new Obstacle(1800+(i*50)+(200),640-(i*80),50,50));
+		}
+		for(int i=1;i<10;i++) {
+			obstacles.add(new Obstacle(2200+(i*50)+(200),330+(i*80),50,50));
+			obstacles.add(new Obstacle(2200+(i*50)+(200),-160+(i*80),50,50));
+		}
+		for(int i=1;i<10;i++) {
+			obstacles.add(new Obstacle(2600+(i*50)+(200),1130-(i*80),50,50));
+			obstacles.add(new Obstacle(2600+(i*50)+(200),640-(i*80),50,50));
+		}
+		for(int i=1;i<10;i++) {
+			obstacles.add(new Obstacle(3000+(i*50)+(200),330+(i*80),50,50));
+			obstacles.add(new Obstacle(3000+(i*50)+(200),-160+(i*80),50,50));
+		}
+		return obstacles;
 	}
-	void course5() {
 
-	}
 }
