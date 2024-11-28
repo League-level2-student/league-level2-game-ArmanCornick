@@ -5,13 +5,13 @@ import java.util.List;
 public class CourseGenerator {
 	
 	static ArrayList<Obstacle> course(int courseNumber){
-		if(courseNumber == 1) {
+		if(courseNumber == 0) {
 			return course1();
 		}
-		else if(courseNumber == 2) {
+		else if(courseNumber == 1) {
 			return course2();
 		}
-		else if(courseNumber == 3) {
+		else if(courseNumber == 2) {
 			return course3();
 		} else {
 			return course4();
@@ -116,5 +116,4 @@ public class CourseGenerator {
 		}
 		return obstacles;
 	}
-
 }

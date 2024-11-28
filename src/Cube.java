@@ -17,7 +17,7 @@ public class Cube extends GameObject {
 	}
 	
 	Cube(){	
-		super(280,460,100,92);
+		super(280,460,70,64);
 		goingUp = false;
 		points = new ArrayList<Point>();
 	}
