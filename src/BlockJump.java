@@ -23,7 +23,10 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	int counter = 1;
 	Random counterRandom;
 	int courseCounter = 0;
-	Boolean gameState = true;
+	Boolean gameState = false;
+	int scoreLetterSpacing = 0;
+	Boolean tutorialState = false;
+	Boolean startingState = true;
 
 
 	BlockJump() {
@@ -64,7 +67,7 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		for (int e = 0; e < obstacles.size(); e++) {
 			if (wave.collisionBox.intersects(obstacles.get(e).collisionBox)) {
 				gameState = false;
-				
+
 			}
 		}
 	}
@@ -74,10 +77,18 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 			wave.goingUp = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER && gameState == false) {
+			startingState = false;
 			gameState = true;
+			tutorialState = false;
 			obstacles = CourseGenerator.course(1);
 			wave.y = 500;
 			courseCounter = 0;
+			scoreLetterSpacing = 0;
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_T && startingState == true) {
+			tutorialState = true;
+
 		}
 	}
 
@@ -93,11 +104,12 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		}
 		if (obstacles.size() > 0 && obstacles.get(0).isActive == false) {
 			obstacles.remove(0);
+			courseCounter += 1;
 		}
 		if (obstacles.size() == 0) {
 			counter = counterRandom.nextInt(4);
 			obstacles = CourseGenerator.course(counter);
-			courseCounter += 1;
+			courseCounter += 50;
 			System.out.println(courseCounter);
 		}
 
@@ -120,22 +132,57 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 			}	
 			g.setColor(Color.red);
 			g.setFont(new Font("Arial", Font.BOLD, 200));
-			g.drawString(String.valueOf(courseCounter), 700,150);
+			if(courseCounter>9) {
+				scoreLetterSpacing = 80;
+			}
+			if(courseCounter>99) {
+				scoreLetterSpacing = 160;
+			}
+			if(courseCounter>999) {
+				scoreLetterSpacing = 240;
+			}
+			if(courseCounter>9999) {
+				scoreLetterSpacing = 320;
+			}
+
+			g.drawString(String.valueOf(courseCounter), 700 - scoreLetterSpacing,150);
 			wave.draw(g);
 		}
 
 		if(gameState==false) {
-			menuState(g);
-		}
+			if(tutorialState==false) {
+				if(startingState==false) {
+					menuState(g);	
+				} else {
+					startingState(g);
+				}
+			} else {
+				instructionState(g);
+			}		
+		} 	
 
 	}
 
 	public void menuState(Graphics g) {
 		g.setColor(Color.red);
 		g.fillRect(350, 200, 800, 600);
-		g.setFont(new Font("Arial", Font.BOLD, 200));
+		g.setFont(new Font("Monospaced", Font.BOLD, 200));
 		g.setColor(Color.black);
-		g.drawString(String.valueOf(courseCounter), 700,365);
+		if(courseCounter>9) {
+			scoreLetterSpacing = 80;
+		}
+		if(courseCounter>99) {
+			scoreLetterSpacing = 160;
+		}
+		if(courseCounter>999) {
+			scoreLetterSpacing = 240;
+		}
+		if(courseCounter>9999) {
+			scoreLetterSpacing = 320;
+		}
+
+		g.drawString(String.valueOf(courseCounter), 700 - scoreLetterSpacing,365);
+
 		g.setFont(new Font("Arial", Font.BOLD, 120));
 		g.drawString("Final Score", 430,500);
 		g.setFont(new Font("Arial", Font.BOLD, 60));
@@ -145,7 +192,7 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		g.setFont(new Font("Arial", Font.BOLD, 80));
 		g.drawString("ENTER", 520,660);
 	}
-	
+
 	public void instructionState(Graphics g) {
 		g.setColor(Color.gray);
 		g.fillRect(350, 200, 800, 600);
@@ -157,8 +204,25 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.red);
 		g.drawString("Hitting obstacles = restart", 450,560);
 		g.setColor(Color.green);
-		g.setFont(new Font("Arial", Font.BOLD, 100));
-		g.drawString("Map is Infinite", 400,700);
+		g.setFont(new Font("Arial", Font.BOLD, 80));
+		g.drawString("Click enter to start", 400,700);
+	}
+
+	public void startingState(Graphics g) {
+		g.setColor(Color.gray);
+		g.fillRect(350, 200, 800, 600);
+		g.setFont(new Font("Arial", Font.BOLD, 150));
+		g.setColor(Color.black);
+		g.drawString("Wave Dash", 355,565);
+		g.setFont(new Font("Arial", Font.BOLD, 45));
+		g.setColor(Color.red);
+		g.drawString("Click T for tutorial", 550,630);
+		g.setColor(Color.green);
+		g.setFont(new Font("Arial", Font.BOLD, 80));
+		g.drawString("Click enter to start", 400,770);
 	}
 }
+
+
+
 
