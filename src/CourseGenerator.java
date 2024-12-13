@@ -78,6 +78,8 @@ public class CourseGenerator {
 	}
 	static ArrayList<Obstacle> course3() {
 		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+		obstacles.add(new Obstacle(1200,0,50, 650));
+		obstacles.add(new Obstacle(1200,850,50,800));
 		for(int i=1;i<20;i++) {
 			obstacles.add(new Obstacle(1000+(i*50)+(200),850-(i*20),50,50));
 			obstacles.add(new Obstacle(1000+(i*50)+(200),640-(i*20),50,50));

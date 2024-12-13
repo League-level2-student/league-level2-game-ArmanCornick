@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,18 +20,24 @@ import javax.swing.Timer;
 public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	JFrame frame;
 	Cube wave;
-	ArrayList<Obstacle> obstacles = CourseGenerator.course(1);
+	ArrayList<Obstacle> obstacles = CourseGenerator.course(0);
 	Timer time;
 	int counter = 1;
 	Random counterRandom;
 	int courseCounter = 0;
 	Boolean gameState = false;
+	static BufferedImage gameIcon;
 	int scoreLetterSpacing = 0;
+	int bgX;
+	static BufferedImage background;
 	Boolean tutorialState = false;
 	Boolean startingState = true;
 
 
 	BlockJump() {
+		gameIcon = loadImage("wavedashicon.png");
+		background = loadImage("wavedashbg.png");
+		bgX = 0;
 		counterRandom = new Random();
 		time = new Timer(1000 / 60, this);
 		frame = new JFrame();
@@ -55,6 +63,10 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 			wave.updateMovement();
 			updateObstacles();
 			checkCollision();
+			bgX-=2;
+			if(bgX==-1500) {
+				bgX = 0;
+			}
 		}
 	}
 
@@ -92,6 +104,15 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	static BufferedImage loadImage(String imageFile) {
+		try {
+			return ImageIO.read(Cube.class.getResourceAsStream(imageFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
@@ -125,8 +146,11 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	public void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(Color.cyan.darker());
-		g.fillRect(0, 0, 1500, 1000);
+		g.fillRect(0, 0, 3000, 1000);
 		if(gameState==true) {
+			
+			g.drawImage(background, bgX, 0, 3000, 1000, null);
+			
 			for (Obstacle i : obstacles) {
 				i.draw(g);
 			}	
@@ -208,7 +232,7 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		g.drawString("Click enter to start", 400,700);
 	}
 
-	public void startingState(Graphics g) {
+	public void startingState(Graphics g) {	
 		g.setColor(Color.gray);
 		g.fillRect(350, 200, 800, 600);
 		g.setFont(new Font("Arial", Font.BOLD, 150));
@@ -220,9 +244,6 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.green);
 		g.setFont(new Font("Arial", Font.BOLD, 80));
 		g.drawString("Click enter to start", 400,770);
+		g.drawImage(gameIcon, 630, 225, 200, 200, null);
 	}
 }
-
-
-
-
