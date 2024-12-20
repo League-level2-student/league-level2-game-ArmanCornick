@@ -62,7 +62,6 @@ public class Cube extends GameObject {
 		g.setColor(Color.black);
 		g.drawImage(waveImage,280,y,width,height, null);
 		g.setColor(Color.red);
-		g.drawRect(collisionBox.x, collisionBox.y, collisionBox.width, collisionBox.height);
 		g1.rotate(-radAngle, x+width/2, y+height/2);
 
 	}

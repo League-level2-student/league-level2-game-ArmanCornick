@@ -1,3 +1,8 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,11 +12,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,6 +35,10 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	int courseCounter = 0;
 	Boolean gameState = false;
 	static BufferedImage gameIcon;
+	Clip clip; 
+	static AudioInputStream song;
+	static AudioInputStream dead;
+	static AudioInputStream chill;
 	int scoreLetterSpacing = 0;
 	int bgX;
 	static BufferedImage background;
@@ -37,6 +49,10 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 	BlockJump() {
 		gameIcon = loadImage("wavedashicon.png");
 		background = loadImage("wavedashbg.png");
+		chill = AudioSystem.getAudioInputStream(getClass().getResourceAsStream("chillguy.wav"));
+		dead = AudioSystem.getAudioInputStream(getClass().getResourceAsStream("dead.wav"));
+		song = AudioSystem.getAudioInputStream(getClass().getResourceAsStream("StockTune-Arch Beam Truss Dome_1728156086.wav"));
+        clip = AudioSystem.getClip();
 		bgX = 0;
 		counterRandom = new Random();
 		time = new Timer(1000 / 60, this);
@@ -49,14 +65,23 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addKeyListener(this);	
 		frame.setVisible(true);
+		try {
+			clip.open(chill);
+		} catch (LineUnavailableException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		clip.start();
 	}
 
 	public static void main(String[] args) {
 		new BlockJump();
 	}
 
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
 		// TODO Auto-generated method stub
 		repaint();
 		if(gameState==true) {
@@ -74,12 +99,33 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 		if(wave.y > 940 || wave.y < -65){
 			gameState = false;
+			song.stop();
+			
+			Thread t = new Thread(() -> dead.play() );
+			t.start();
+			try {
+				Thread.sleep(1300);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			chill.loop();
 		}
 
 		for (int e = 0; e < obstacles.size(); e++) {
 			if (wave.collisionBox.intersects(obstacles.get(e).collisionBox)) {
 				gameState = false;
-
+				song.stop();
+				Thread t = new Thread(() -> dead.play() );
+				t.start();
+				try {
+					Thread.sleep(1300);
+				} catch (InterruptedException r) {
+					// TODO Auto-generated catch block
+					r.printStackTrace();
+				}
+				chill.loop();
+				break;
 			}
 		}
 	}
@@ -96,7 +142,8 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 			wave.y = 500;
 			courseCounter = 0;
 			scoreLetterSpacing = 0;
-
+			song.loop();
+			chill.stop();
 		}
 		if (e.getKeyCode() == KeyEvent.VK_T && startingState == true) {
 			tutorialState = true;
@@ -148,9 +195,8 @@ public class BlockJump extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.cyan.darker());
 		g.fillRect(0, 0, 3000, 1000);
 		if(gameState==true) {
-			
 			g.drawImage(background, bgX, 0, 3000, 1000, null);
-			
+
 			for (Obstacle i : obstacles) {
 				i.draw(g);
 			}	
